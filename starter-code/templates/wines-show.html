@@ -1,9 +1,11 @@
-<div class="row">
-  <img src="{{wine.picture}}" alt="wine picture">
+<div class="group">
+  <section><img src="{{wine.picture}}" alt="wine picture"></section>
+  <aside>
   <h5>{{wine.name}}</h5>
   <p>{{wine.year}} {{wine.grapes}}
   <p>{{wine.region}} Region, {{wine.country | uppercase}}
   <p>{{wine.price | currency}}
   <div>{{wine.description}}</div>
-  <small>{{wine.updated_at}}</small>
+  </aside>
 </div>
+<small class="date">{{wine.updated_at | date:'medium' }}</small>

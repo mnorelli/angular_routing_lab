@@ -27,23 +27,39 @@ app.config(function($routeProvider,$locationProvider){
 /////////////////
 
 app.controller('WinesIndexCtrl',function($scope,WineService){
-  $scope.wines = WineService.query();
+  WineService.query().get(function(data){
+    $scope.wines = data;
+  });
+  console.log('wines', $scope.wines);
 })
 
 app.controller('WinesShowCtrl',function($scope,WineService,$routeParams){
   $scope.wine = WineService.get($routeParams.id)
 })
 
+// WinesShowCtrl.$inject = ['$http'];
+
 ////////////
 // MODELS //
 ////////////
 
-app.factory('WineService', function(){
+app.factory('WineService', ['$http',function($http){
 
   var WineService = {};
 
   WineService.query = function(){
-    return ALL_WINES;
+    // return ALL_WINES;
+    return{
+       get: function(callback){
+        $http
+          .get('http://daretoexplore.herokuapp.com/wines')
+          .then(function(response){
+            console.log(response.data)
+            callback(response.data);
+            });
+          }
+      }
+
   }
 
   WineService.get = function(id){
@@ -55,15 +71,7 @@ app.factory('WineService', function(){
 
   return WineService;
 
-})
-
-
-
-
-
-
-
-
+}])
 
 
 
