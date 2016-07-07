@@ -28,41 +28,59 @@ app.config(function($routeProvider, $locationProvider){
 // CONTROLLERS //
 /////////////////
 
-app.controller('WinesIndexCtrl',function($scope, WineService){
-  console.log("Wine Index");
-  // $scope.hello = "wine index controller is working!";
-  // $scope.wines = ALL_WINES; // basic show wines solution
-  $scope.wines = WineService.query();
+app.controller('WinesIndexCtrl',function($scope, WineService){ 
+  WineService.query()
+    .then(function(wines){
+        $scope.wines = wines; 
+        // console.log($scope.wines);
+    });
+  });
+
+app.controller('WinesShowCtrl', function($scope, $routeParams, WineService){ 
+    // console.log(WineService);
+    WineService.findOne($routeParams.id)
+        .then(function(res, err){
+            if(err){
+                console.log('error ', err)
+            }
+            $scope.wine = res;
+        });
+    // console.log(wineId);
 });
 
-app.controller('WinesShowCtrl', function($scope, WineService, $routeParams){
-    // console.log("Wine Show", $routeParams.id);
-    $scope.wine = WineService.get($routeParams.id);
-    // console.log($scope.wine.name);
-});
+
 
 ////////////
 // MODELS //
 ////////////
 
-app.factory('WineService', function(){
-
+app.factory('WineService', function($http){
   var WineService = {};
 
   WineService.query = function(){
-    return ALL_WINES;
-  }
+    return $http.get('http://daretoexplore.herokuapp.com/wines')
+        .then(function(response, err) {
+            if(err){
+                console.log('error: ', err);
+            }
+        //success method:
+        return response.data;
+      });
+    }
 
-  WineService.get = function(id){
-    var id = parseInt(id);
-    return ALL_WINES.find(function(wine){
-      return wine.id == id;
-    });
-  }
+  WineService.findOne = function(id){
+     return $http.get('http://daretoexplore.herokuapp.com/wines/' +  id)
+        .then(function(response, err){
+            if(err){
+                console.log('error: ', err);
+            }
+            return response.data;
+        });
+    }
 
   return WineService;
 
-})
+});
 
 
 
