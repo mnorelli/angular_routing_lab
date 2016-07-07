@@ -27,7 +27,8 @@ app.config(function($routeProvider,$locationProvider){
 /////////////////
 
 app.controller('WinesIndexCtrl',function($scope,WineService){
-  WineService.query().get(function(data){
+    // $scope.wine = WineService.query()
+  WineService.query().query(function(data){
     $scope.wines = data;
   });
   console.log('wines', $scope.wines);
@@ -50,7 +51,7 @@ app.factory('WineService', ['$http',function($http){
   WineService.query = function(){
     // return ALL_WINES;
     return{
-       get: function(callback){
+       query: function(callback){
         $http
           .get('http://daretoexplore.herokuapp.com/wines')
           .then(function(response){
