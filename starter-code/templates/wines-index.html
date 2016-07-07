@@ -1,1 +1,3 @@
-Welcome to Wine Index (templates/wines-index.html)
+<div class="row" ng-repeat='wine in wines'>
+  <h5><a href="/wines/{{wine.id}}">{{wine.name}}</a></h5>
+</div>
